@@ -1,27 +1,32 @@
 
-import React from 'react';
+import React, { useContext, } from 'react';
 import { useLoaderData, useParams } from 'react-router';
+import { BookContext } from '../../context/BookProvider';
 
 const BookDetails = () => {
     const { bookId: bookParamsId } = useParams();
     const books = useLoaderData();
 
-    // ✅ আগে find করো
+   
     const expectedBook = books.find((book) => String(book.bookId) === String(bookParamsId));
 
-    // ✅ তারপর destructure করো
+  
     const { bookId, bookName, author, image, review, totalPages, rating, category, tags, publisher, yearOfPublishing } = expectedBook;
+
+    const {handleMarkAsRead, handleWishList} = useContext(BookContext);
+    
+
 
     return (
         <div style={{ padding: "2rem" }}>
             <div className="grid grid-cols-2 gap-10 max-w-4xl mx-auto">
 
-                {/* বাম পাশ — বইয়ের ছবি */}
+            
                 <div className="bg-base-200 rounded-2xl flex items-center justify-center min-h-96">
-                    <img src={image} alt={bookName} className="h-[400px] object-contain rounded" />
+                    <img src={image} alt={bookName} className="h-100 w-100 object-contain rounded" />
                 </div>
 
-                {/* ডান পাশ — বইয়ের তথ্য */}
+         
                 <div className="flex flex-col gap-0">
                     <h2 className="text-3xl font-bold mb-1">{bookName}</h2>
                     <p className="text-gray-500 text-sm mb-4">By : {author}</p>
@@ -63,8 +68,8 @@ const BookDetails = () => {
                     </div>
 
                     <div className="flex gap-3">
-                        <button className="btn btn-outline">Read</button>
-                        <button className="btn bg-cyan-400 text-white border-none hover:bg-cyan-500">Wishlist</button>
+                        <button onClick={()=> handleMarkAsRead(expectedBook)} className="btn btn-outline">Mark as Read</button>
+                        <button onClick={() => handleWishList(expectedBook)} className="btn bg-cyan-400 text-white border-none hover:bg-cyan-500">Add to Wishlist</button>
                     </div>
                 </div>
             </div>
